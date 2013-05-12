@@ -8,11 +8,11 @@ module Hirb
       end
 
       def pager_command(*commands) #:nodoc:
-        @pager_command = (!@pager_command.nil? && commands.empty?) ? @pager_command : 
-          begin
-            commands = [ENV['PAGER'], 'less', 'more', 'pager'] if commands.empty?
-            commands.compact.uniq.find {|e| Util.command_exists?(e[/\w+/]) }
-          end
+        @pager_command = nil if !defined?(@pager_command)
+        return @pager_command if !@pager_command.nil? && commands.empty?
+
+        commands = [ENV['PAGER'], 'less', 'more', 'pager'] if commands.empty?
+        @pager_command = commands.compact.uniq.find {|e| Util.command_exists?(e[/\w+/]) }
       end
 
       # Pages with a ruby-only pager which either pages or quits.
@@ -57,7 +57,7 @@ module Hirb
 
     def initialize(width, height, options={})
       resize(width, height)
-      @pager_command = options[:pager_command] if options[:pager_command]
+      @pager_command = options[:pager_command]
     end
 
     # Pages given string using configured pager.

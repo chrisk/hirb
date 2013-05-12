@@ -70,6 +70,7 @@ module Hirb
     end
 
     def config(reload=false)
+      @config ||= nil
       if (@config.nil? || reload)
         @config = config_files.inject({}) {|acc,e|
           Util.recursive_hash_merge(acc,read_config_file(e))

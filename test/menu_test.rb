@@ -43,6 +43,7 @@ describe "Menu" do
 
     it "with block and no chosen doesn't call block" do
       menu_input ""
+      @called = false
       block = lambda {|e| @called = true }
       capture_stdout {
         menu([1,2,3], &block).should == []

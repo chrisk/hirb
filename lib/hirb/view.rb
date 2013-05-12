@@ -75,11 +75,12 @@ module Hirb
       #   Hirb.enable
       #   Hirb.enable :formatter=>false
       def enable(options={}, &block)
+        @new_config_file = false
         Array(options.delete(:config_file)).each {|e|
           @new_config_file = true
           Hirb.config_files << e
         }
-        enable_output_method unless @output_method
+        enable_output_method unless output_method?
         merge_or_load_config options
         resize(config[:width], config[:height])
         @enabled = true
@@ -87,13 +88,14 @@ module Hirb
 
       # Indicates if Hirb::View is enabled.
       def enabled?
-        @enabled || false
+        @enabled = false if !defined?(@enabled)
+        @enabled
       end
 
       # Disable's Hirb's output and revert's irb's output method if irb exists.
       def disable
         @enabled = false
-        disable_output_method if @output_method
+        disable_output_method if output_method?
         false
       end
 
@@ -173,6 +175,11 @@ module Hirb
       end
 
       #:stopdoc:
+      def output_method?
+        @output_method = nil if !defined?(@output_method)
+        !!@output_method
+      end
+
       def enable_output_method
         if defined?(Ripl) && Ripl.respond_to?(:started?) && Ripl.started?
           @output_method = true
@@ -232,17 +239,18 @@ module Hirb
       def pager=(value); @pager = value; end
 
       def formatter(reload=false)
+        @formatter = nil if !defined?(@formatter)
         @formatter = reload || @formatter.nil? ? Formatter.new(config[:output]) : @formatter
       end
 
       def formatter=(value); @formatter = value; end
 
       def merge_or_load_config(additional_config={})
-        if @config && (@new_config_file || !additional_config.empty?)
+        if config && (@new_config_file || !additional_config.empty?)
           Hirb.config = nil
-          load_config Util.recursive_hash_merge(@config, additional_config)
+          load_config Util.recursive_hash_merge(config, additional_config)
           @new_config_file = false
-        elsif !@enabled
+        elsif !enabled?
           load_config(additional_config)
         end
       end
@@ -256,6 +264,7 @@ module Hirb
       def config_loaded?; !!@config; end
 
       def config
+        @config ||= nil
         @config
       end
       
