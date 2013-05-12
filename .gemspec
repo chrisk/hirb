@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'rubygems' unless Object.const_defined?(:Gem)
-require File.dirname(__FILE__) + "/lib/hirb/version"
+$: << File.join(File.dirname(__FILE__), "lib")
+require "hirb/version"
 
 Gem::Specification.new do |s|
   s.name        = "hirb"
