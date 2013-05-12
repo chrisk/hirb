@@ -101,8 +101,8 @@ module Hirb
     def build_klass_config(output_class)
       output_ancestors = output_class.ancestors.map {|e| e.to_s}.reverse
       output_ancestors.pop
-      hash = output_ancestors.inject({}) {|h, klass|
-        add_klass_config_if_true(h, klass) {|c,klass| c[klass] && c[klass][:ancestor] }
+      hash = output_ancestors.inject({}) {|h, ancestor|
+        add_klass_config_if_true(h, ancestor) {|c, klass| c[klass] && c[klass][:ancestor] }
       }
       add_klass_config_if_true(hash, output_class.to_s) {|c,klass| c[klass] }
     end

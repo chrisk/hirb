@@ -126,7 +126,7 @@ module Hirb
           false
         else
           index = (obj = e.backtrace.find {|f| f =~ /^\(eval\)/}) ? e.backtrace.index(obj) : e.backtrace.length
-          $stderr.puts "Hirb Error: #{e.message}", e.backtrace.slice(0,index).map {|e| "    " + e }
+          $stderr.puts "Hirb Error: #{e.message}", e.backtrace.slice(0,index).map {|line| "    " + line }
           true
         end
       end
