@@ -15,7 +15,7 @@ describe "Console" do
     TABLE
     capture_stdout {
       table([5,3], :fields=>[:to_s])
-    }.should == expected_table +"\n"
+    }.should == expected_table + "\n"
   end
 
   it ".render_output sets config if it wasn't before" do
