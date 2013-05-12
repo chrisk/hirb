@@ -161,7 +161,9 @@ class Helpers::Table
   end
 
   #:stopdoc:
-  attr_accessor :width, :max_fields, :field_lengths, :fields
+  attr_accessor :field_lengths, :fields
+  attr_writer :max_fields, :width
+
   def initialize(rows, options={})
     raise ArgumentError, "Table must be an array of hashes or array of arrays" unless rows.is_a?(Array) &&
       (rows[0].is_a?(Hash) or rows[0].is_a?(Array) or rows.empty?)

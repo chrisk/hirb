@@ -63,8 +63,7 @@ module Hirb
     DEFAULT_WIDTH = 120
     DEFAULT_HEIGHT = 40
     class<<self
-      attr_accessor :render_method
-      attr_reader :config
+      attr_writer :config, :render_method
 
       # This activates view functionality i.e. the formatter, pager and size detection. If irb exists, it overrides irb's output
       # method with Hirb::View.view_output. When called multiple times, new configs are merged into the existing config.
@@ -191,7 +190,10 @@ module Hirb
 
       def disable_output_method
         if defined?(IRB::Irb) && !defined? Ripl
-          ::IRB::Irb.send :alias_method, :output_value, :non_hirb_view_output
+          ::IRB::Irb.class_eval do
+            remove_method :output_value if method_defined?(:output_value)
+            alias_method :output_value, :non_hirb_view_output
+          end
         end
         @output_method = nil
       end

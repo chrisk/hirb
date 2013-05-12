@@ -31,7 +31,7 @@ require 'hirb/version'
 #                    (i.e. #inspect for irb). Defaults to false.
 module Hirb
   class <<self
-    attr_accessor :config_files, :config
+    attr_writer :config_files, :config
 
     # Enables view functionality. See Hirb::View.enable for details.
     def enable(options={}, &block)

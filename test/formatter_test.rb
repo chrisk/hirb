@@ -5,47 +5,51 @@ describe "Formatter" do
     @formatter = Formatter.new(hash)
   end
 
+  def formatter
+    @formatter
+  end
+
   describe "klass_config" do
     it "recursively merges ancestor options" do
-      @formatter = set_formatter "String"=>{:args=>[1,2], :options=>{:fields=>[:to_s]}},
+      set_formatter "String"=>{:args=>[1,2], :options=>{:fields=>[:to_s]}},
         "Object"=>{:method=>:object_output, :ancestor=>true, :options=>{:vertical=>true}},
         "Kernel"=>{:method=>:default_output}
       expected_result = {:method=>:object_output, :args=>[1, 2], :ancestor=>true, :options=>{:fields=>[:to_s], :vertical=>true}}
-      @formatter.klass_config(::String).should == expected_result
+      formatter.klass_config(::String).should == expected_result
     end
 
     it "doesn't merge ancestor options" do
-      @formatter = set_formatter "String"=>{:args=>[1,2]}, "Object"=>{:method=>:object_output},
+      set_formatter "String"=>{:args=>[1,2]}, "Object"=>{:method=>:object_output},
        "Kernel"=>{:method=>:default_output}
-      @formatter.klass_config(::String).should == {:args=>[1, 2]}
+      formatter.klass_config(::String).should == {:args=>[1, 2]}
     end
 
     it "returns hash when nothing found" do
-      set_formatter.klass_config(::String).should == {}
+      set_formatter
+      formatter.klass_config(::String).should == {}
     end
 
     describe "with dynamic_config" do
-      def set_formatter(hash={})
-        @formatter = Formatter.new(hash)
-      end
-      after { Formatter.dynamic_config = {}}
+      after { Formatter.dynamic_config = {} }
 
       it "merges ancestor options and sets local config" do
         Formatter.dynamic_config = {"Object"=>{:method=>:blah}, "Kernel"=>{:args=>[1,2], :ancestor=>true}}
-        set_formatter.klass_config(::String).should == {:args=>[1,2], :ancestor=>true}
-        @formatter.config['Kernel'].should == {:args=>[1,2], :ancestor=>true}
+        set_formatter
+        formatter.klass_config(::String).should == {:args=>[1,2], :ancestor=>true}
+        formatter.config['Kernel'].should == {:args=>[1,2], :ancestor=>true}
       end
 
       it "uses local config over dynamic_config" do
         Formatter.dynamic_config = {"String"=>{:method=>:blah}}
         set_formatter "String"=>{:args=>[1,2]}
-        @formatter.klass_config(::String).should == {:args=>[1,2]}
+        formatter.klass_config(::String).should == {:args=>[1,2]}
       end
 
       it "uses dynamic_config and sets local config" do
         Formatter.dynamic_config = {"String"=>{:method=>:blah}}
-        set_formatter.klass_config(::String).should == {:method=>:blah}
-        @formatter.config['String'].should == {:method=>:blah}
+        set_formatter
+        formatter.klass_config(::String).should == {:method=>:blah}
+        formatter.config['String'].should == {:method=>:blah}
       end
     end
   end
@@ -54,27 +58,27 @@ describe "Formatter" do
     before_all { eval "module ::Dooda; end" }
 
     it "#add_view sets formatter config" do
-      @formatter = set_formatter
-      @formatter.add_view ::Dooda, :class=>"DoodaView"
-      @formatter.klass_config(::Dooda).should == {:class=>"DoodaView"}
+      set_formatter
+      formatter.add_view ::Dooda, :class=>"DoodaView"
+      formatter.klass_config(::Dooda).should == {:class=>"DoodaView"}
     end
 
     it "#add_view overwrites existing formatter config" do
-      @formatter = set_formatter "Dooda"=>{:class=>"DoodaView"}
-      @formatter.add_view ::Dooda, :class=>"DoodaView2"
-      @formatter.klass_config(::Dooda).should == {:class=>"DoodaView2"}
+      set_formatter "Dooda"=>{:class=>"DoodaView"}
+      formatter.add_view ::Dooda, :class=>"DoodaView2"
+      formatter.klass_config(::Dooda).should == {:class=>"DoodaView2"}
     end
 
     it "#parse_console_options passes all options except for formatter options into :options" do
-      @formatter = set_formatter
+      set_formatter
       options = {:class=>'blah', :method=>'blah', :output_method=>'blah', :blah=>'blah'}
       expected_options = {:class=>'blah', :method=>'blah', :output_method=>'blah', :options=>{:blah=>'blah'}}
-      @formatter.parse_console_options(options).should == expected_options
+      formatter.parse_console_options(options).should == expected_options
     end
 
     it "#determine_output_class recognizes subclasses of to_a classes" do
       class Array2 < Array; end
-      @formatter.determine_output_class(Array2.new(%w{ok dude})).should == String
+      formatter.determine_output_class(Array2.new(%w{ok dude})).should == String
     end
   end
 
