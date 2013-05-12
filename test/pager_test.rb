@@ -32,27 +32,27 @@ describe "Pager" do
     it "pages once in normal mode" do
       $stdin.expects(:gets).returns("\n")
       output = capture_stdout { pager.page(create_pageable_string, false) }
-      output.include?('quit').should == true
-      output.include?('finished').should == true
+      output.should.include 'quit'
+      output.should.include 'finished'
     end
 
     it "doesn't page in normal mode" do
       $stdin.expects(:gets).never
       output = capture_stdout { pager.page("a\n", false) }
-      output.include?("a\n=== Pager finished. ===\n").should == true
+      output.should.include "a\n=== Pager finished. ===\n"
     end
 
     it "pages once in inspect mode" do
       $stdin.expects(:gets).returns("\n")
       output = capture_stdout { pager.page(create_pageable_string(true), true) }
-      output.include?('quit').should == true
-      output.include?('finished').should == true
+      output.should.include 'quit'
+      output.should.include 'finished'
     end
 
     it "doesn't page in inspect mode" do
       $stdin.expects(:gets).never
       output = capture_stdout { pager.page("a", true) }
-      output.include?("a\n=== Pager finished. ===\n").should == true
+      output.should.include "a\n=== Pager finished. ===\n"
     end
     after_all { Hirb.disable }
   end

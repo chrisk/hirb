@@ -91,8 +91,8 @@ describe "Menu" do
 
     it "with no items to choose from always return without asking" do
       $stdin.expects(:gets).never
-      menu([], :ask=>false).should == []
-      menu([], :ask=>true).should == []
+      menu([], :ask=>false).should.equal []
+      menu([], :ask=>true).should.equal []
     end
 
     it "with directions option turns off directions" do

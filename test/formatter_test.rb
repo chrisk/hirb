@@ -35,8 +35,8 @@ describe "Formatter" do
       it "merges ancestor options and sets local config" do
         Formatter.dynamic_config = {"Object"=>{:method=>:blah}, "Kernel"=>{:args=>[1,2], :ancestor=>true}}
         set_formatter
-        formatter.klass_config(::String).should == {:args=>[1,2], :ancestor=>true}
-        formatter.config['Kernel'].should == {:args=>[1,2], :ancestor=>true}
+        formatter.klass_config(::String).should.equal({:args=>[1,2], :ancestor=>true})
+        formatter.config['Kernel'].should.equal({:args=>[1,2], :ancestor=>true})
       end
 
       it "uses local config over dynamic_config" do
@@ -48,8 +48,8 @@ describe "Formatter" do
       it "uses dynamic_config and sets local config" do
         Formatter.dynamic_config = {"String"=>{:method=>:blah}}
         set_formatter
-        formatter.klass_config(::String).should == {:method=>:blah}
-        formatter.config['String'].should == {:method=>:blah}
+        formatter.klass_config(::String).should.equal({:method=>:blah})
+        formatter.config['String'].should.equal({:method=>:blah})
       end
     end
   end

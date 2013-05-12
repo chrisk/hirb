@@ -36,6 +36,12 @@ module TestHelpers
   def reset_config
     View.instance_eval "@config = nil"
   end
+
+  # Matchers
+  def less_than(n);                lambda { |obj| obj < n  }; end
+  def less_than_or_equal_to(n);    lambda { |obj| obj <= n }; end
+  def greater_than(n);             lambda { |obj| obj > n  }; end
+  def greater_than_or_equal_to(n); lambda { |obj| obj >= n }; end
 end
 
 class Bacon::Context

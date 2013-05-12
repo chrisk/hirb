@@ -9,7 +9,7 @@ describe "View" do
     Hirb.enable
     View.pager.stubs(:activated_by?).returns(true)
     View.pager.expects(:page)
-    View.page_output('blah').should == true
+    View.page_output('blah').should.be.true
     Hirb.disable
   end
 
@@ -18,7 +18,7 @@ describe "View" do
     Hirb.disable
     View.pager.stubs(:activated_by?).returns(true)
     View.pager.expects(:page).never
-    View.page_output('blah').should == false
+    View.page_output('blah').should.be.false
   end
 
   it "view_output catches unexpected errors and prints them" do
@@ -41,7 +41,7 @@ describe "View" do
 
     it "is enabled?" do
       Hirb.enable
-      View.enabled?.should == true
+      View.should.be.enabled
     end
 
     def output_class_config(klass)
@@ -67,7 +67,7 @@ describe "View" do
         Hirb.enable config
       end
 
-      Hirb.config_files.include?('ok').should == true
+      Hirb.config_files.should.include('ok')
       output_keys = %w{ActiveRecord::Base Array Regexp String Struct}
       View.config[:output].keys.sort.should == output_keys
     end
@@ -89,7 +89,7 @@ describe "View" do
 
     it "with config_file option adds to config_file" do
       Hirb.enable :config_file=> 'test_file'
-      Hirb.config_files.include?('test_file').should == true
+      Hirb.config_files.should.include 'test_file'
     end
 
     it "with ignore_errors enable option" do
@@ -117,16 +117,15 @@ describe "View" do
 
       capture_stderr { View.resize }
 
-      pager.width.should.not == 10
-      pager.height.should.not == 10
+      pager.width.should.not.equal 10
+      pager.height.should.not.equal 10
       reset_terminal_size
     end
 
     it "changes width and height with ENV" do
       ENV['COLUMNS'] = ENV['LINES'] = '10' # simulates resizing
       View.resize
-      pager.width.should == 10
-      pager.height.should == 10
+      [pager.width, pager.height].should == [10, 10]
     end
 
     it "with no environment or stty still has valid width and height" do
@@ -137,8 +136,8 @@ describe "View" do
       ENV['COLUMNS'] = ENV['LINES'] = nil
 
       View.resize
-      pager.width.is_a?(Integer).should == true
-      pager.height.is_a?(Integer).should == true
+      pager.width.is_a?(Integer).should.be.true
+      pager.height.is_a?(Integer).should.be.true
       reset_terminal_size
     end
   end
@@ -155,7 +154,7 @@ describe "View" do
     Object.stubs(:const_defined?).with(:IRB).returns(false)
     Hirb.enable
     Hirb.disable
-    View.enabled?.should == false
+    View.should.not.be.enabled
   end
 
   it "capture_and_render" do

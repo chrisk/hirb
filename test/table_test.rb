@@ -132,7 +132,7 @@ describe "Table" do
       2 rows in set
       TABLE
       value = [{'a'=>"1\n", 'b'=>2}, {'a'=>"3\t", 'b'=>4}]
-      table(value).should == expected_table
+      table(value).should.equal expected_table
       value.should == [{'a'=>"1\n", 'b'=>2}, {'a'=>"3\t", 'b'=>4}]
     end
 
@@ -314,7 +314,7 @@ describe "Table" do
       TABLE
       View.load_config
       View.resize(30)
-      table([{:a=> "A" * 50, :b=>2, :c=>"C"*10}]).should == expected_table
+      table([{:a=> "A" * 50, :b=>2, :c=>"C"*10}]).should.equal expected_table
       reset_config
     end
 
@@ -473,7 +473,7 @@ describe "Table" do
       2 rows in set
       TABLE
       options = {:vertical=>true}
-      table([{:a=>1, :b=>2}, {:a=>3, :b=>4}], options).should == expected_table
+      table([{:a=>1, :b=>2}, {:a=>3, :b=>4}], options).should.equal expected_table
       table([{:a=>1, :b=>2}, {:a=>3, :b=>4}], options).should == expected_table
     end
 
@@ -566,7 +566,7 @@ TABLE
       +------+-------+
       2 rows in set
       TABLE
-      table([[1,2],[2,3]], :change_fields=>{0=>'name', 1=>'value'}).should == expected_table
+      table([[1,2],[2,3]], :change_fields=>{0=>'name', 1=>'value'}).should.equal expected_table
       table([[1,2],[2,3]], :change_fields=>['name', 'value']).should == expected_table
     end
 
@@ -593,7 +593,7 @@ TABLE
       +------+-------+
       2 rows in set
       TABLE
-      table([{:a=>1,:b=>2}, {:a=>2,:b=>3}], :change_fields=>{:a=>'name', :b=>'value', :c=>'time'}).should == expected_table
+      table([{:a=>1,:b=>2}, {:a=>2,:b=>3}], :change_fields=>{:a=>'name', :b=>'value', :c=>'time'}).should.equal expected_table
       table([[1,2],[2,3]], :change_fields=>['name', 'value','time']).should == expected_table
     end
 
@@ -658,7 +658,7 @@ TABLE
       +---+---+
       2 rows in set
       TABLE
-      table([{'a'=>1, 'b'=>2}, {'a'=>3, 'b'=>4}], :add=>1, :delete_callbacks=>[:and_two]).should == expected_table
+      table([{'a'=>1, 'b'=>2}, {'a'=>3, 'b'=>4}], :add=>1, :delete_callbacks=>[:and_two]).should.equal expected_table
 
       Helpers::Table.send(:remove_method, :and_two_callback)
     end

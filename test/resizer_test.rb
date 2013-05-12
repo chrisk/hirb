@@ -19,14 +19,14 @@ describe "Resizer" do
   it "resize sets columns by relative lengths" do
     table :field_lengths=>{:a=>30, :b=>30, :c=>40}, :width=>60
     Helpers::Table::Resizer.resize!(@table)
-    @field_lengths.values.inject {|a,e| a+=e}.should <= @width
+    @field_lengths.values.inject {|a,e| a+=e}.should.be less_than_or_equal_to(@width)
     @field_lengths.values.uniq.size.should.not == 1
   end
 
   it "resize sets all columns roughly equal when adusting long fields don't work" do
     table :field_lengths=>{:field1=>10, :field2=>15, :field3=>100}, :width=>20
     Helpers::Table::Resizer.resize!(@table)
-    @field_lengths.values.inject {|a,e| a+=e}.should <= @width
+    @field_lengths.values.inject {|a,e| a+=e}.should.be less_than_or_equal_to(@width)
     @field_lengths.values.each {|e| e.should <= 4 }
   end
 
